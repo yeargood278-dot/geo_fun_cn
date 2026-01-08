@@ -5,15 +5,17 @@ $content = $courses[$id] ?? $courses['c1s1'];
 $qa = $content['quiz']['part_a'];
 $qb = $content['quiz']['part_b'];
 
-// 智能判断所属书籍：如果ID以 'b2' 开头，则是必修二，否则默认为必修一
-$bid = (strpos($id, 'b2') === 0) ? 'b2' : 'b1';
+// 智能判断所属书籍
+$bid = 'b1'; $theme_color = '#3498db'; // 默认蓝
+if (strpos($id, 'b2') === 0) { $bid = 'b2'; $theme_color = '#d35400'; } // 必修二红
+if (strpos($id, 'xb1') === 0) { $bid = 'xb1'; $theme_color = '#27ae60'; } // 选必一绿
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>警校考核</title>
+    <title>特工考核</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .header { background: <?php echo ($bid=='b2') ? '#d35400' : '#2c3e50'; ?>; color: white; padding: 40px 20px; border-radius: 0 0 20px 20px; text-align: center; }

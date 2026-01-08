@@ -1,8 +1,13 @@
 <?php include 'data_zoo.php'; 
-// 获取书籍ID，默认为 b1
 $bid = $_GET['bid'] ?? 'b1';
-// 根据ID选择导图数据
-$current_mindmap = ($bid == 'b2') ? $b2_mindmap : $b1_mindmap;
+
+if ($bid == 'b2') {
+    $current_mindmap = $b2_mindmap;
+} elseif ($bid == 'xb1') {
+    $current_mindmap = $xb1_mindmap; // 爱宠主题导图
+} else {
+    $current_mindmap = $b1_mindmap;
+}
 $current_title = $books[$bid]['title'];
 ?>
 <!DOCTYPE html>

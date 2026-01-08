@@ -1,7 +1,7 @@
 <?php 
 include 'data_zoo.php'; 
-$id = $_GET['id'] ?? 'c1s1';
-$content = $courses[$id] ?? $courses['c1s1'];
+$id = $_GET['id'] ?? 'xb1c1s1';
+$content = $courses[$id] ?? $courses['xb1c1s1'];
 $slides = $content['ppt'];
 ?>
 <!DOCTYPE html>
@@ -57,6 +57,11 @@ $slides = $content['ppt'];
         @keyframes orbit { from { transform: rotate(0deg) translateX(100px) rotate(0deg); } to { transform: rotate(360deg) translateX(100px) rotate(-360deg); } }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(5px)} 75%{transform:translateX(-5px)} 100%{transform:translateX(0)} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes spin { 100% { transform:rotate(360deg); } }
+        @keyframes sun-move { 0%{top:20%} 50%{top:80%} 100%{top:20%} }
+        @keyframes orbit-move { from { transform: rotate(0deg) translateX(100px) rotate(0deg); } to { transform: rotate(360deg) translateX(100px) rotate(-360deg); } }
+
 
         /* === 必修二特效 (哪吒主题) === */
         
@@ -111,6 +116,34 @@ $slides = $content['ppt'];
         .vapour { font-size:40px; position:absolute; left:50px; animation: rise 3s infinite; }
         .rain { font-size:40px; position:absolute; right:50px; top:50px; animation: fall 1s infinite; color:#3498db; }
 
+        /* === XB1 特效 (爱宠自然地理) === */
+        /* 地球自转 */
+        .css_rotation { width: 200px; height: 200px; background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Western_Hemisphere_transparent_background.png/240px-Earth_Western_Hemisphere_transparent_background.png'); background-size: cover; animation: spin 10s linear infinite; border-radius: 50%; box-shadow: inset -20px -20px 50px rgba(0,0,0,0.5); }
+        
+        /* 昼夜交替 */
+        .css_day_night { width: 200px; height: 200px; background: #3498db; border-radius: 50%; position: relative; overflow: hidden; }
+        .css_day_night::after { content:''; position: absolute; width: 50%; height: 100%; background: rgba(0,0,0,0.6); right: 0; }
+        
+        /* 公转轨道 */
+        .css_orbit { width: 300px; height: 200px; border: 2px dashed #ccc; border-radius: 50%; position: relative; }
+        .css_sun { width: 40px; height: 40px; background: gold; border-radius: 50%; position: absolute; top: 80px; left: 130px; box-shadow: 0 0 20px gold; }
+        .css_earth_moving { width: 20px; height: 20px; background: #3498db; border-radius: 50%; position: absolute; top: 90px; left: 140px; animation: orbit-move 5s linear infinite; }
+
+        /* 太阳直射点移动 */
+        .css_sun_move { width: 300px; height: 200px; border-left: 2px solid #333; position: relative; }
+        .line-n { border-bottom: 1px dashed red; position: absolute; top: 20%; width: 100%; text-align: right; }
+        .line-s { border-bottom: 1px dashed blue; position: absolute; top: 80%; width: 100%; text-align: right; }
+        .sun-point { width: 30px; height: 30px; background: orange; border-radius: 50%; position: absolute; left: 50%; animation: sun-move 4s infinite ease-in-out; }
+        
+        /* 褶皱动画 */
+        .css_fold { width: 200px; height: 100px; border-top: 5px solid #333; border-radius: 50% 50% 0 0; animation: pulse 2s infinite; }
+        /* 断层动画 */
+        .css_fault { width: 200px; height: 150px; position: relative; }
+        .css_fault::before { content:''; position: absolute; width: 100px; height: 100px; background: #95a5a6; left: 0; bottom: 0; animation: slideDown 2s infinite; }
+        .css_fault::after { content:''; position: absolute; width: 100px; height: 100px; background: #7f8c8d; right: 0; top: 0; }
+        @keyframes slideDown { 0%{bottom:20px} 50%{bottom:0} 100%{bottom:20px} }
+
+         
         /* 其他 CSS 组件 */
         .css-nuclear { font-size:3rem; font-weight:bold; color:#e67e22; animation: pulse 1s infinite; }
         .css-seismic { width:300px; height:100px; background: repeating-linear-gradient(90deg, #333, #333 2px, transparent 2px, transparent 20px); animation: shake 0.5s infinite; max-width: 100%; }
@@ -191,7 +224,8 @@ $slides = $content['ppt'];
         <?php foreach($slides as $k => $s): ?>
         <?php 
             // 默认角色配置
-            $color = '#3498db'; $emoji = '🐰'; $name = '朱迪警官';
+           // $color = '#3498db'; $emoji = '🐰'; $name = '朱迪警官';
+           $color = '#3498db'; $emoji = '👮'; $name = '讲师';
             
             // 角色判断逻辑
             if(isset($s['role'])) {
@@ -206,6 +240,14 @@ $slides = $content['ppt'];
                 if($s['role']=='taiyi') { $color='#f1c40f'; $emoji='🍶'; $name='太乙真人'; }
                 if($s['role']=='lijing') { $color='#8e44ad'; $emoji='🏯'; $name='李靖'; }
                 if($s['role']=='shengongbao') { $color='#2c3e50'; $emoji='🐆'; $name='申公豹'; }
+
+                // 爱宠角色映射
+            if($s['role']=='max') { $color='#3498db'; $emoji='🐶'; $name='麦克 (Max)'; } // 忠诚/主角
+            if($s['role']=='snowball') { $color='#e74c3c'; $emoji='🐰'; $name='小白 (Snowball)'; } // 疯狂/霸气
+            if($s['role']=='duke') { $color='#8d6e63'; $emoji='🐕'; $name='杜老大 (Duke)'; } // 憨厚
+            if($s['role']=='gidget') { $color='#fd79a8'; $emoji='🐩'; $name='啾啾 (Gidget)'; } // 机智/浪漫
+            if($s['role']=='chloe') { $color='#a29bfe'; $emoji='🐱'; $name='克洛伊 (Chloe)'; } // 高冷
+            if($s['role']=='norman') { $color='#f1c40f'; $emoji='🐹'; $name='诺曼 (Norman)'; } // 迷糊
             }
         ?>
         <div class="slide-card animate__animated animate__<?php echo $s['anim_type'] ?? 'fadeIn'; ?>" id="slide-<?php echo $k; ?>">
@@ -328,6 +370,27 @@ $slides = $content['ppt'];
                         } else {
                             echo '<div class="icon-large">🖼️</div>';
                         }
+
+                    // CSS 渲染
+                    if ($v == 'css_rotation') echo '<div class="css_rotation"></div>';
+                    elseif ($v == 'css_day_night') echo '<div class="css_day_night"></div>';
+                    elseif ($v == 'css_orbit') echo '<div class="css_orbit"><div class="css_sun"></div><div class="css_earth_moving"></div></div>';
+                    elseif ($v == 'css_sun_move') echo '<div class="css_sun_move"><div class="line-n">23°26′N</div><div class="line-s">23°26′S</div><div class="sun-point"></div></div>';
+                    elseif ($v == 'css_clock') echo '<div class="icon-large">⏰</div>';
+                    elseif ($v == 'css_speed_map') echo '<div class="icon-large">🏎️</div>';
+                    elseif ($v == 'css_perihelion') echo '<div class="icon-large">☀️🏃</div>';
+                    elseif ($v == 'css_angle') echo '<div class="icon-large">📐</div>';
+                    elseif ($v == 'css_date_line') echo '<div class="icon-large">📅</div>';
+                    elseif ($v == 'css_coriolis') echo '<div class="icon-large">🌀</div>';
+                    elseif ($v == 'css_day_length') echo '<div class="icon-large">🌗</div>';
+                    elseif ($v == 'css_sun_height') echo '<div class="icon-large">📏</div>';
+                    
+                    // 默认图标
+                    elseif (strpos($v, 'icon_') === 0) {
+                        $map = ['icon_earth'=>'🌍','icon_star'=>'⭐','icon_final'=>'🎓','icon_plane'=>'✈️','icon_chart'=>'📊','icon_water_drop'=>'💧','icon_shield'=>'🛡️','icon_compare'=>'🆚','icon_storm'=>'🌪️','icon_alert_red'=>'🚨','icon_life'=>'🧬','icon_tree'=>'🌳','icon_balance'=>'⚖️','icon_map_scatter'=>'🗺️','icon_rebuild'=>'🏗️','icon_drill'=>'📢','icon_money'=>'💰','icon_badge'=>'👮','icon_ship'=>'🚢','icon_factory'=>'🏭','icon_phone'=>'📱','icon_train'=>'🚄','icon_fire'=>'🔥','icon_key'=>'🔑','icon_drone'=>'🚁','icon_baby'=>'👶','icon_hu_line'=>'🇨🇳','icon_leaf_shiny'=>'🍃','icon_park'=>'🏡','icon_forest_map'=>'🗺️','icon_soil_layers'=>'🥪','icon_soil_comp'=>'🧪','icon_shovel'=>'⛏️','icon_rock_plant'=>'🪨','icon_climate_soil'=>'🌦️','icon_protect_soil'=>'🛡️','icon_salt'=>'🧂','icon_drought'=>'☀️','icon_china_map'=>'🇨🇳','icon_cold'=>'🥶','icon_arrow_map'=>'↘️','icon_sandstorm'=>'🏜️','icon_earth_crack'=>'🏚️','icon_chain'=>'🔗','icon_alert_yellow'=>'⚠️','icon_radar'=>'📡','icon_flood_safe'=>'🏊','icon_run_direction'=>'🏃','icon_kit'=>'⛑️','icon_siren'=>'🚑','icon_satellite'=>'🛰️','icon_beidou'=>'🌌','icon_integration'=>'🧩'];
+                        echo '<div class="icon-large">'.($map[$v]??'🖼️').'</div>';
+                    }
+
                     ?>
                 </div>
             </div>
