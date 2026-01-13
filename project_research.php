@@ -1,24 +1,31 @@
 <?php 
 include 'data_zoo.php'; 
-
-// 获取书籍ID，默认为 b1
 $bid = $_GET['bid'] ?? 'b1';
 
-// 根据 bid 加载对应的项目列表
+// 数据与主题选择 (系统修复部分)
 if ($bid == 'b2') {
     $current_projects = $research_projects_b2;
     $theme_color = '#d35400'; 
     $title_prefix = '🔥 必修二';
 } elseif ($bid == 'xb1') {
-    $current_projects = $research_projects_xb1;
+    $current_projects = $research_projects_xb1; 
     $theme_color = '#27ae60'; 
     $title_prefix = '🐶 选必一';
+} elseif ($bid == 'xb2') {
+    $current_projects = $research_projects_xb2; 
+    $theme_color = '#9b59b6'; 
+    $title_prefix = '🐰 选必二';
+} elseif ($bid == 'xb3') { // 修复点
+    $current_projects = $research_projects_xb3; 
+    $theme_color = '#e74c3c'; 
+    $title_prefix = '🛡️ 选必三';
 } else {
     $current_projects = $research_projects_b1;
     $theme_color = '#3498db'; 
     $title_prefix = '🌍 必修一';
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -51,13 +58,14 @@ if ($bid == 'b2') {
 </head>
 <body>
 
-    <div class="header-section animate__animated animate__fadeInDown">
+<div class="header-section animate__animated animate__fadeInDown">
         <div class="top-nav">
-            <a href="project_research.php?bid=b1">🌍 必修一</a>
-            <a href="project_research.php?bid=b2">🔥 必修二</a>
-            <a href="project_research.php?bid=xb1">🐶 选必一</a>
+            <a href="project_research.php?bid=b1">必1</a>
+            <a href="project_research.php?bid=b2">必2</a>
+            <a href="project_research.php?bid=xb1">选1</a>
+            <a href="project_research.php?bid=xb2">选2</a>
+            <a href="project_research.php?bid=xb3">选3</a>
         </div>
-        
         <h1 class="display-6 fw-bold mb-2"><?php echo $title_prefix; ?> 问题研究</h1>
         <p class="lead opacity-75 fs-6">打破章节壁垒 · 融合全书知识 · 解决现实问题</p>
     </div>
@@ -89,8 +97,8 @@ if ($bid == 'b2') {
         </div>
         
         <div class="text-center mb-5 pb-5 mt-5">
-            <a href="index.php" class="btn btn-outline-secondary rounded-pill px-4 mx-2 shadow-sm">🏠 返回首页</a>
-            <a href="chapter_map.php?bid=<?php echo $bid; ?>" class="btn btn-primary rounded-pill px-4 mx-2 shadow" style="background: <?php echo $theme_color; ?>; border:none;">🗺️ 查看地图</a>
+            <a href="index.php" class="btn btn-outline-secondary rounded-pill px-4 mx-2 shadow-sm">🏠 首页</a>
+            <a href="chapter_map.php?bid=<?php echo $bid; ?>" class="btn btn-primary rounded-pill px-4 mx-2 shadow" style="background: <?php echo $theme_color; ?>; border:none;">🗺️ 地图</a>
         </div>
     </div>
 

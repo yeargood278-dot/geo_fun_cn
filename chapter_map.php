@@ -1,21 +1,22 @@
 <?php include 'data_zoo.php'; 
 $bid = $_GET['bid'] ?? 'b1';
 
-if ($bid == 'b2') {
-    $current_mindmap = $b2_mindmap;
-} elseif ($bid == 'xb1') {
-    $current_mindmap = $xb1_mindmap; // 爱宠主题导图
-} else {
-    $current_mindmap = $b1_mindmap;
-}
+// 选择导图数据 (系统修复部分)
+if ($bid == 'b2') $current_mindmap = $b2_mindmap;
+elseif ($bid == 'xb1') $current_mindmap = $xb1_mindmap;
+elseif ($bid == 'xb2') $current_mindmap = $xb2_mindmap;
+elseif ($bid == 'xb3') $current_mindmap = $xb3_mindmap; // 修复点：加载选必3导图
+else $current_mindmap = $b1_mindmap;
+
 $current_title = $books[$bid]['title'];
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
-    <title>警校作战地图 - <?php echo $current_title; ?></title>
+    <title>作战地图 - <?php echo $current_title; ?></title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.bootcdn.net/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
     <style>
@@ -71,17 +72,14 @@ $current_title = $books[$bid]['title'];
     </style>
 </head>
 <body>
-    <nav class="navbar d-flex justify-content-between align-items-center">
-        <span class="navbar-brand fw-bold" style="font-size: 1.1rem;">
-            <?php echo ($bid=='b2') ? '🔥' : '🗺️'; ?> 作战地图: <?php echo $current_title; ?>
-        </span>
-        <div>
-            <?php if($bid == 'b2'): ?>
-                <a href="chapter_map.php?bid=b1" class="btn btn-outline-primary btn-sm rounded-pill px-3 me-1">切换必修1</a>
-            <?php else: ?>
-                <a href="chapter_map.php?bid=b2" class="btn btn-outline-warning btn-sm rounded-pill px-3 me-1">切换必修2</a>
-            <?php endif; ?>
-            <a href="index.php" class="btn btn-secondary btn-sm rounded-pill px-3">🏠 首页</a>
+<nav class="navbar navbar-light bg-white px-3 shadow-sm justify-content-between">
+        <span class="navbar-brand fw-bold"><?php echo $current_title; ?></span>
+        <div class="nav-links d-flex align-items-center">
+            <a href="chapter_map.php?bid=b1" class="text-primary text-decoration-none">必1</a>
+            <a href="chapter_map.php?bid=b2" class="text-warning text-decoration-none">必2</a>
+            <a href="chapter_map.php?bid=xb1" class="text-success text-decoration-none">选1</a>
+            <a href="chapter_map.php?bid=xb2" class="text-secondary text-decoration-none" style="color:#9b59b6!important;">选2</a>
+            <a href="chapter_map.php?bid=xb3" class="text-danger text-decoration-none">选3</a> <a href="index.php" class="btn btn-sm btn-outline-secondary rounded-pill ms-2">🏠</a>
         </div>
     </nav>
     <div class="map-viewport">

@@ -1,14 +1,17 @@
 <?php 
 include 'data_zoo.php'; 
-$id = $_GET['id'] ?? 'c1s1';
-$content = $courses[$id] ?? $courses['c1s1'];
-$qa = $content['quiz']['part_a'];
-$qb = $content['quiz']['part_b'];
+$id = $_GET['id'] ?? 'xb2c1s1';
+$content = $courses[$id] ?? $courses['xb2c1s1'];
+// 防止报错，如果找不到题目数据，提供默认空数组
+$qa = $content['quiz']['part_a'] ?? [];
+$qb = $content['quiz']['part_b'] ?? [];
 
-// 智能判断所属书籍
-$bid = 'b1'; $theme_color = '#3498db'; // 默认蓝
-if (strpos($id, 'b2') === 0) { $bid = 'b2'; $theme_color = '#d35400'; } // 必修二红
-if (strpos($id, 'xb1') === 0) { $bid = 'xb1'; $theme_color = '#27ae60'; } // 选必一绿
+// 智能判断所属书籍颜色及ID (系统修复部分)
+$bid = 'b1'; $theme_color = '#3498db'; // 默认必修一(蓝)
+if (strpos($id, 'b2') === 0) { $bid = 'b2'; $theme_color = '#d35400'; } // 必修二(红)
+if (strpos($id, 'xb1') === 0) { $bid = 'xb1'; $theme_color = '#27ae60'; } // 选必一(绿)
+if (strpos($id, 'xb2') === 0) { $bid = 'xb2'; $theme_color = '#9b59b6'; } // 选必二(紫)
+if (strpos($id, 'xb3') === 0) { $bid = 'xb3'; $theme_color = '#e74c3c'; } // 选必三(深红) - 修复点
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -63,10 +66,10 @@ if (strpos($id, 'xb1') === 0) { $bid = 'xb1'; $theme_color = '#27ae60'; } // 选
                 <div class="ans-show text-dark mt-3"><?php echo $l['ans']; ?></div>
             </div>
             <?php endforeach; ?>
-            <div class="text-center mt-5 pb-5">
-                <a href="index.php" class="btn btn-primary rounded-pill px-4 mx-2">🏠 首页</a>
-                <a href="chapter_map.php?bid=<?php echo $bid; ?>" class="btn btn-secondary rounded-pill px-4 mx-2">🗺️ 地图</a>
-            </div>
+            <div class="text-center mb-5 pb-5 mt-5">
+            <a href="index.php" class="btn btn-outline-secondary rounded-pill px-4 mx-2 shadow-sm">🏠 首页</a>
+            <a href="chapter_map.php?bid=<?php echo $bid; ?>" class="btn btn-primary rounded-pill px-4 mx-2 shadow" style="background: <?php echo $theme_color; ?>; border:none;">🗺️ 地图</a>
+        </div>
         </div>
     </div>
     <script>

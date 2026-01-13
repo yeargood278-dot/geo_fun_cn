@@ -1,8 +1,30 @@
 <?php 
-include 'data_zoo.php'; 
+//include 'data_zoo.php'; 
+require_once 'data_zoo.php';
+
 $id = $_GET['id'] ?? 'xb1c1s1';
-$content = $courses[$id] ?? $courses['xb1c1s1'];
+$content = $courses[$id] ?? $courses['xb1c1s1']; // 默认 fallback
 $slides = $content['ppt'];
+
+// --- 关键修改点：自动解析书籍ID (bid) ---
+// 逻辑：截取课程ID的前3位（如 'xb1', 'xb2', 'xb3'）作为书籍ID
+// 这样无论以后加 'xb4' 还是 'xb5'，都能自动正确跳转
+$bid = substr($id, 0, 3); 
+
+// 如果截取失败或不在书籍列表中，默认回 xb1
+if (!isset($books[$bid])) {
+    $bid = 'xb1';
+}
+
+// 获取当前课程数据
+$page = $courses[$id] ?? null;
+
+// 如果课程不存在
+if (!$page) {
+    echo "<h1>未找到课程: $id</h1><a href='index.php'>返回首页</a>";
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -249,6 +271,26 @@ $slides = $content['ppt'];
             if($s['role']=='chloe') { $color='#a29bfe'; $emoji='🐱'; $name='克洛伊 (Chloe)'; } // 高冷
             if($s['role']=='norman') { $color='#f1c40f'; $emoji='🐹'; $name='诺曼 (Norman)'; } // 迷糊
             }
+                 
+                // XB2 彼得兔角色 (本次新增)
+            if($s['role']=='peter') { $color='#3498db'; $emoji='🐰'; $name='彼得兔 (Peter)'; } // 主角/蓝色
+            if($s['role']=='benjamin') { $color='#8d6e63'; $emoji='🎩'; $name='本杰明 (Benjamin)'; } // 伙伴/棕色
+            if($s['role']=='lily') { $color='#e91e63'; $emoji='🎀'; $name='莉莉 (Lily)'; } // 聪明/粉色
+            if($s['role']=='tod') { $color='#e67e22'; $emoji='🦊'; $name='托德先生 (Mr. Tod)'; } // 反派/橙色
+            if($s['role']=='jemima') { $color='#f1c40f'; $emoji='🦆'; $name='杰米玛 (Jemima)'; } // 单纯/黄色
+            
+            // XB3 功夫熊猫角色 (本次新增)
+            if($s['role']=='po') { $color='#e74c3c'; $emoji='🐼'; $name='阿宝 (Po)'; } // 主角/红色
+            if($s['role']=='shifu') { $color='#8e44ad'; $emoji='🐹'; $name='师父 (Shifu)'; } // 导师/紫色
+            if($s['role']=='tigress') { $color='#d35400'; $emoji='🐯'; $name='悍娇虎 (Tigress)'; } // 力量/橙色
+            if($s['role']=='ping') { $color='#27ae60'; $emoji='🦢'; $name='平先生 (Mr. Ping)'; } // 民生/绿色
+            if($s['role']=='crane') { $color='#3498db'; $emoji='🕊️'; $name='仙鹤 (Crane)'; } // 侦察/蓝色
+            
+            // 兼容其他书角色 (保留)
+            if($s['role']=='max') { $color='#2980b9'; $emoji='🐶'; $name='麦克'; }
+            if($s['role']=='snowball') { $color='#c0392b'; $emoji='🐰'; $name='小白'; }
+            if($s['role']=='peter') { $color='#3498db'; $emoji='🐰'; $name='彼得兔 (Peter)'; }
+        
         ?>
         <div class="slide-card animate__animated animate__<?php echo $s['anim_type'] ?? 'fadeIn'; ?>" id="slide-<?php echo $k; ?>">
             <div class="role-header" style="background: <?php echo $color; ?>">
@@ -284,7 +326,15 @@ $slides = $content['ppt'];
                             'icon_final' => '🎓',
                             // 必修二新增
                             'icon_hu_line' => '🇨🇳', 'icon_chart' => '📊', 'icon_baby' => '👶',
-                            'icon_train' => '🚄', 'icon_fire' => '🔥', 'icon_factory' => '🏭', 'icon_ship' => '🚢'
+                            'icon_train' => '🚄', 'icon_fire' => '🔥', 'icon_factory' => '🏭', 'icon_ship' => '🚢',
+                            //XB3新增图标映射
+                            'icon_life'=>'🥟', 'icon_chart'=>'📉', 'icon_alert_red'=>'🚨', 
+                            'icon_clothing'=>'👕', 'icon_shield'=>'🛡️', 'icon_final'=>'📜', 
+                            'icon_fire'=>'🔥', 'icon_coal'=>'⚫', 'icon_oil'=>'🛢️', 
+                            'icon_bus'=>'🚌', 'icon_wind'=>'🍃', 'icon_wheat'=>'🌾', 
+                            'icon_soil_layers'=>'🥪', 'icon_satellite'=>'🛰️', 'icon_ship'=>'🚢', 
+                            'icon_sea'=>'🌊', 'icon_island'=>'🏝️', 'icon_radar'=>'📡', 
+                            'icon_integration'=>'🤝'
                         ];
 
                         // 特殊 CSS 动画渲染
@@ -387,7 +437,10 @@ $slides = $content['ppt'];
                     
                     // 默认图标
                     elseif (strpos($v, 'icon_') === 0) {
-                        $map = ['icon_earth'=>'🌍','icon_star'=>'⭐','icon_final'=>'🎓','icon_plane'=>'✈️','icon_chart'=>'📊','icon_water_drop'=>'💧','icon_shield'=>'🛡️','icon_compare'=>'🆚','icon_storm'=>'🌪️','icon_alert_red'=>'🚨','icon_life'=>'🧬','icon_tree'=>'🌳','icon_balance'=>'⚖️','icon_map_scatter'=>'🗺️','icon_rebuild'=>'🏗️','icon_drill'=>'📢','icon_money'=>'💰','icon_badge'=>'👮','icon_ship'=>'🚢','icon_factory'=>'🏭','icon_phone'=>'📱','icon_train'=>'🚄','icon_fire'=>'🔥','icon_key'=>'🔑','icon_drone'=>'🚁','icon_baby'=>'👶','icon_hu_line'=>'🇨🇳','icon_leaf_shiny'=>'🍃','icon_park'=>'🏡','icon_forest_map'=>'🗺️','icon_soil_layers'=>'🥪','icon_soil_comp'=>'🧪','icon_shovel'=>'⛏️','icon_rock_plant'=>'🪨','icon_climate_soil'=>'🌦️','icon_protect_soil'=>'🛡️','icon_salt'=>'🧂','icon_drought'=>'☀️','icon_china_map'=>'🇨🇳','icon_cold'=>'🥶','icon_arrow_map'=>'↘️','icon_sandstorm'=>'🏜️','icon_earth_crack'=>'🏚️','icon_chain'=>'🔗','icon_alert_yellow'=>'⚠️','icon_radar'=>'📡','icon_flood_safe'=>'🏊','icon_run_direction'=>'🏃','icon_kit'=>'⛑️','icon_siren'=>'🚑','icon_satellite'=>'🛰️','icon_beidou'=>'🌌','icon_integration'=>'🧩'];
+                        $map = ['icon_earth'=>'🌍','icon_star'=>'⭐','icon_final'=>'🎓','icon_plane'=>'✈️','icon_chart'=>'📊','icon_water_drop'=>'💧','icon_shield'=>'🛡️','icon_compare'=>'🆚','icon_storm'=>'🌪️','icon_alert_red'=>'🚨','icon_life'=>'🧬','icon_tree'=>'🌳','icon_balance'=>'⚖️','icon_map_scatter'=>'🗺️','icon_rebuild'=>'🏗️','icon_drill'=>'📢','icon_money'=>'💰','icon_badge'=>'👮','icon_ship'=>'🚢','icon_factory'=>'🏭','icon_phone'=>'📱','icon_train'=>'🚄','icon_fire'=>'🔥','icon_key'=>'🔑','icon_drone'=>'🚁','icon_baby'=>'👶','icon_hu_line'=>'🇨🇳','icon_leaf_shiny'=>'🍃','icon_park'=>'🏡','icon_forest_map'=>'🗺️','icon_soil_layers'=>'🥪','icon_soil_comp'=>'🧪','icon_shovel'=>'⛏️','icon_rock_plant'=>'🪨','icon_climate_soil'=>'🌦️','icon_protect_soil'=>'🛡️','icon_salt'=>'🧂','icon_drought'=>'☀️','icon_china_map'=>'🇨🇳','icon_cold'=>'🥶','icon_arrow_map'=>'↘️','icon_sandstorm'=>'🏜️','icon_earth_crack'=>'🏚️','icon_chain'=>'🔗','icon_alert_yellow'=>'⚠️','icon_radar'=>'📡','icon_flood_safe'=>'🏊','icon_run_direction'=>'🏃','icon_kit'=>'⛑️','icon_siren'=>'🚑','icon_satellite'=>'🛰️','icon_beidou'=>'🌌','icon_integration'=>'🧩','icon_map_scatter'=>'🗺️', 'icon_chart'=>'📊', 'icon_hu_line'=>'📉', 
+                            'icon_integration'=>'🧩', 'icon_climate_soil'=>'🌦️', 'icon_factory'=>'🏭', 
+                            'icon_final'=>'🎓', 'icon_chain'=>'🔗', 'icon_park'=>'🏡', 
+                            'icon_compare'=>'🆚', 'icon_life'=>'🐟', 'icon_earth'=>'🌍'];
                         echo '<div class="icon-large">'.($map[$v]??'🖼️').'</div>';
                     }
 

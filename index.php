@@ -46,7 +46,7 @@
 <body>
     <div class="hero text-center">
         <h1 class="display-4 fw-bold">🌏 地理乐 Geo_Fun </h1>
-        <p class="lead mt-3">疯狂动物城 & 哪吒传奇 · 动物警校地理培训基地</p>
+        <p class="lead mt-3">疯狂动物城 & 哪吒传奇 & 彼得兔· 爱宠地理培训基地</p>
     </div>
     
     <div class="container mb-5">
@@ -79,7 +79,7 @@
         </div>
         
         <div class="text-center text-muted mt-5 mb-3">
-            <small>© 2026 Geo_Fun 动物警校&陈堂关地理培训基地</small>
+            <small>© 2026 Geo_Fun 动物警校&陈堂关&田园地理培训基地</small>
         </div>
     </div>
 </body>
